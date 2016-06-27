@@ -4,7 +4,10 @@ from __future__ import with_statement, print_function
 
 import os
 import os.path as op
-import ushlex as shlex
+try:
+    import ushlex as shlex
+except ImportError:
+    import shlex
 from collections import defaultdict, namedtuple
 
 import logging
@@ -18,7 +21,7 @@ from .defaults import default_conf, DEFAULT_FAMILY_FILENAME
 from .load import (load_args, load_conf, load_data, load_data_raw,
                    load_tags, load_themes, load_families,
                    post_load, export_conf, export_families,
-                   son_key, label_key, index_key,
+                   sort_sons, sort_labels, sort_indexes,
                    dump_data, show_conf, show_tags, show_themes, check_theme)
 
 
@@ -128,9 +131,9 @@ app.template_filter('mdi')(md_iconvert)  # inline version, no surrounding <p>
 
 # CUSTOM Sort filters
 #
-app.template_filter('sortsons')(lambda it: sorted(it, key=son_key))
-app.template_filter('sortlabels')(lambda it: sorted(it, key=label_key))
-app.template_filter('sortindexes')(lambda it: sorted(it, key=index_key))
+app.template_filter('sortsons')(sort_sons)
+app.template_filter('sortlabels')(sort_labels)
+app.template_filter('sortindexes')(sort_indexes)
 
 # CUSTOM functions for urls in templates
 #
@@ -332,7 +335,7 @@ def search_results(query):
                 matches[family_path].append({
                     'title' : md_iconvert(graph_data['title']),
                     'text'  : graph_data['text'],
-                    'labels': sorted(graph_data['labels'], key=label_key),
+                    'labels': sort_labels(graph_data['labels']),
                     'id'    : graph_data['id'],
                 })
 

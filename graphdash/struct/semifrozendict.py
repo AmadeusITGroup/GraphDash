@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 
 class SemiFrozenDict(dict):
@@ -26,5 +26,6 @@ class SemiFrozenDict(dict):
                    'authorized keys are {1}').format(key, list(self)))
 
     def update(self, *args, **kwargs):
-        for k, v in dict(*args, **kwargs).iteritems():
-            self[k] = v
+        dict_ = dict(*args, **kwargs)
+        for k in dict_:
+            self[k] = dict_[k]

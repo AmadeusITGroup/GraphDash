@@ -49,11 +49,12 @@ class Tree(object):
 
     def iter_all_nodes(self, path=()):
         yield path, self
-        for son_name, son in self.sons.iteritems():
+        for son_name in self.sons:
+            son = self.sons[son_name]
             for node_path, node in son.iter_all_nodes(path + (son_name,)):
                 yield node_path, node
 
-    def __prettify(self, decorate, with_data, key, index, name, indent):
+    def __prettify(self, decorate, with_data, sort_sons, index, name, indent):
         """Recursive pretty printer.
         """
         res = [u'{0}({1}) {2}'.format(indent, index, decorate((name, self)))]
@@ -64,16 +65,15 @@ class Tree(object):
             for i, thing in enumerate(with_data(self.data), start=1):
                 res.append(u'{0}|{1:2d}| {2}'.format(indent + increment, i, thing))
 
-        sorted_sons = sorted(self.sons.iteritems(), key=key)
-        for i, (son_name, son) in enumerate(sorted_sons, start=1):
-            res.append(son.__prettify(decorate, with_data, key, i, son_name, indent))
+        for i, (son_name, son) in enumerate(sort_sons(self.sons.items()), start=1):
+            res.append(son.__prettify(decorate, with_data, sort_sons, i, son_name, indent))
 
         return '\n'.join(res)
 
-    def prettify(self, decorate=lambda x: '', with_data=None, key=lambda x: x):
+    def prettify(self, decorate=lambda x: '', with_data=None, sort_sons=lambda x: x):
         return self.__prettify(decorate=decorate,
                                with_data=with_data,
-                               key=key,
+                               sort_sons=sort_sons,
                                index=1,
                                name='',
                                indent='')

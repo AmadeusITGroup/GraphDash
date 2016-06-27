@@ -6,6 +6,7 @@ Packaging
 """
 
 from __future__ import with_statement
+import sys
 from setuptools import setup, find_packages
 
 with open('VERSION') as f:
@@ -15,6 +16,18 @@ with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
 
 
+INSTALL_REQUIRES = [
+    'argparse',
+    'PyYAML==3.11',
+    'Flask==0.11.1',
+    'Markdown==2.4',
+    'Pygments==2.1.3',
+    'stop-words',
+]
+
+if sys.version_info[0] < 3:
+    INSTALL_REQUIRES.append('ushlex==0.99')
+
 setup(
     name='GraphDash',
     version=VERSION,
@@ -23,9 +36,6 @@ setup(
     url='https://github.com/AmadeusITGroup/graphdash',
     description='A dashboard for graphs.',
     long_description=LONG_DESCRIPTION,
-    py_modules=[
-        'graphdashmain',
-    ],
     packages=find_packages(),
     package_data={
         'graphdash': [
@@ -35,15 +45,8 @@ setup(
             'assets/img/*',
         ],
     },
-    install_requires=[
-        'argparse',
-        'PyYAML==3.11',
-        'Flask==0.11.1',
-        'Markdown==2.4',
-        'Pygments==2.1.3',
-        'stop-words',
-        'ushlex==0.99',
-    ],
+    zip_safe=False,
+    install_requires=INSTALL_REQUIRES,
     entry_points={
         'console_scripts': [
             'GraphDash=graphdash.__main__:main',

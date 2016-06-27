@@ -88,7 +88,7 @@
         {% endif %}
     {% endfor %}
         <ol class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
-        {% for (son_name, son) in sons.iteritems() |sortsons %}
+        {% for (son_name, son) in sons.items() |sortsons %}
             {% set d = son.data.graphs |length %}
             {% set s = son.sons        |length %}
 

@@ -2,9 +2,9 @@
 
 from __future__ import with_statement, print_function
 
+import sys
 import os
 import os.path as op
-import sys
 from operator import itemgetter
 
 import yaml
@@ -15,6 +15,9 @@ from .nlp import Cleaner, StopWords
 from .defaults import (DEFAULT_FAMILY, SINK, get_parser,
                        default_graph_data, default_family_data,
                        default_label_data)
+
+if sys.version_info[0] >= 3:
+    unicode = str
 
 
 def is_hidden(filepath):
@@ -56,7 +59,7 @@ def load_args():
     # configuration from file
     enforced_args = {}
 
-    for key, value in args.iteritems():
+    for key, value in args.items():
         # None value is default, only other values are enforced
         if value is not None:
             enforced_args[key] = value
@@ -135,7 +138,7 @@ def export_conf(conf, conf_file, exclude=None):
 
     with open(conf_file, 'w') as f:
         # The dict() is also to get rid of the SemiFrozenDict
-        dumped = dict(item for item in conf.iteritems()
+        dumped = dict(item for item in conf.items()
                       if item[0] not in exclude)
 
         f.write(yaml.safe_dump(dumped, default_flow_style=False, allow_unicode=True))
@@ -456,22 +459,25 @@ def sort_graphs(data):
         ranks = [graph_data['rank'] for graph_data in node.data['graphs']]
 
         if len(set(type(r) for r in ranks)) > 1:
-            print(('(!) Mix of types found in graphs ranks for '
-                   'node {0}: {1}').format(node_path, sorted(ranks)))
+            print(('(!) Mix of types found in graphs ranks for {0}: {1}, '
+                   'skipping sort').format(node_path, ranks))
+        else:
+            # We sort the graphs based on their ranks
+            node.data['graphs'].sort(key=itemgetter('rank'))
+
+        # We attribute the ids of graphs based on their ranks
+        for i, graph_data in enumerate(node.data['graphs'], start=1):
+            graph_data['id'] = i
 
         # We warn about type mixing in family ranks
         ranks = [node.sons[s].data['rank'] for s in node.sons]
 
         if len(set(type(r) for r in ranks)) > 1:
-            print(('(!) Mix of types found in sons ranks for '
-                   'node {0}: {1}').format(node_path, sorted(ranks)))
+            print(('(!) Mix of types found in families ranks for {0}: {1}, '
+                   'using ranks as strings').format(node_path, ranks))
 
-        # We sort the graphs based on their ranks
-        node.data['graphs'].sort(key=itemgetter('rank'))
-
-        # We attribute the ids of graphs based on their ranks
-        for i, graph_data in enumerate(node.data['graphs'], start=1):
-            graph_data['id'] = i
+            for s in node.sons:
+                node.sons[s].data['rank'] = unicode(node.sons[s].data['rank'])
 
 
 def post_load(data):
@@ -570,17 +576,17 @@ def show_themes(themes):
 
 # These functions are used to build custom sort filters
 #
-def son_key(item):
-    """Sort sons from node.sons.iteritems()"""
-    return item[1].data['rank']
+def sort_sons(items):
+    """Sort sons from node.sons.items()"""
+    return sorted(items, key=lambda it: it[1].data['rank'])
 
 
-def label_key(l):
-    return l['color'], l
+def sort_labels(labels):
+    return sorted(labels, key=lambda l: (l['color'], l['name']))
 
 
-def index_key(i):
-    return len(i), i
+def sort_indexes(indexes):
+    return sorted(indexes, key=lambda i: (len(i), i))
 
 
 def decorate(node_item):
@@ -597,5 +603,5 @@ def dump_data(data, details=False):
 
     return '\n'.join([
         "\n* Tree [{0}]:".format('detailed' if details else 'simple'),
-        data.prettify(decorate=decorate, with_data=with_data, key=son_key),
+        data.prettify(decorate=decorate, with_data=with_data, sort_sons=sort_sons),
     ])
