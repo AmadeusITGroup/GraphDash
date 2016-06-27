@@ -60,48 +60,80 @@ pip install <span class="pl-c1">.</span></pre></div>
 <h2>
 <a id="launch-the-webapp" class="anchor" href="#launch-the-webapp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Launch the webapp</h2>
 
-<p>Just do (<code>$PATH</code> should include <code>~/.local/bin</code> if installation in user
-space):</p>
+<p>For user-space installation, make sure your <code>$PATH</code> includes <code>~/.local/bin</code>.</p>
 
-<div class="highlight highlight-source-shell"><pre>GraphDash -r default_graph_dir</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ GraphDash -r default_graph_dir
+<span class="pl-k">*</span> Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)</pre></div>
 
-<p>The dashboard can be configured with a configuration file like this
-(also YAML):</p>
+<p>The dashboard can be configured with a YAML config file and the <code>-c/--conf</code> option:</p>
 
 <div class="highlight highlight-source-shell"><pre>$ cat docs/example.conf
-root: default_graph_dir
-title: <span class="pl-s"><span class="pl-pds">"</span>Default title<span class="pl-pds">"</span></span>
-subtitle: <span class="pl-s"><span class="pl-pds">"</span>Default subtitle<span class="pl-pds">"</span></span></pre></div>
+root: ../default_graph_dir
+title: <span class="pl-s"><span class="pl-pds">"</span>Example of title ;)<span class="pl-pds">"</span></span>
+subtitle: <span class="pl-s"><span class="pl-pds">"</span>Example of subtitle<span class="pl-pds">"</span></span>
 
-<p>Then use <code>-c</code> to use it:</p>
+$ GraphDash -c docs/example.conf
+<span class="pl-k">*</span> Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)</pre></div>
 
-<div class="highlight highlight-source-shell"><pre>GraphDash -c docs/example.conf</pre></div>
+<p>You can generate a template of configuration file:</p>
 
-<p>You can generate a template of configuration file like this:</p>
-
-<div class="highlight highlight-source-shell"><pre>GraphDash -C template.conf</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ GraphDash -C template.conf</pre></div>
 
 <h2>
 <a id="serve-with-gunicorn" class="anchor" href="#serve-with-gunicorn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Serve with Gunicorn</h2>
 
 <p>If not already installed on your machine, install <code>Gunicorn</code>:</p>
 
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># On Fedora you may need to do beforehand as root: yum install libffi-devel</span>
-pip install --user gunicorn</pre></div>
+<div class="highlight highlight-source-shell"><pre>pip install --user gunicorn <span class="pl-c"># on Fedora you may need to install libffi-devel before</span></pre></div>
 
-<p>You can import the webapp through <code>graphdash:app</code>, so using <code>Gunicorn</code>:</p>
+<p>Since you can import the webapp through <code>graphdash:app</code>, you can serve it with <code>Gunicorn</code>:</p>
 
 <div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid graphdash:app <span class="pl-k">&amp;</span></pre></div>
 
-<p>The configuration file of the webapp can be searched using the <code>CONF</code>
-environment variable. With <code>Gunicorn</code>, you can pass environment variables
-to the workers with <code>--env</code>, so you can do:</p>
+<p>The configuration file of the webapp can be set with the <code>CONF</code> environment variable.
+With <code>Gunicorn</code>, you can pass environment variables to the workers with <code>--env</code>:</p>
 
 <div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app <span class="pl-k">&amp;</span></pre></div>
 
-<p>With <code>Gunicorn</code>, you can restart the server by sending a <code>HUP</code> signal:</p>
+<p>Then you can restart the server by sending a <code>HUP</code> signal:</p>
 
-<div class="highlight highlight-source-shell"><pre><span class="pl-c1">kill</span> -HUP <span class="pl-s"><span class="pl-pds">`</span>cat server.pid<span class="pl-pds">`</span></span> <span class="pl-c"># restart !</span></pre></div>
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">kill</span> -HUP <span class="pl-s"><span class="pl-pds">`</span>cat server.pid<span class="pl-pds">`</span></span> <span class="pl-c"># restart!</span></pre></div>
+
+<p>But you should <em>not</em> use these commands yourself, that is what <code>GraphDashManage</code> is for!</p>
+
+<h2>
+<a id="graphdashmanage" class="anchor" href="#graphdashmanage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>GraphDashManage</h2>
+
+<p><code>GraphDashManage</code> is used to <code>start</code>, <code>stop</code>, <code>restart</code> the
+instances of <code>Gunicorn</code> serving <code>graphdash:app</code>. It needs a
+configuration file in the current directory:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ cat settings.sh
+ALL_MODES=(
+   [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/example.conf<span class="pl-pds">"</span></span>
+   [<span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/example.conf<span class="pl-pds">"</span></span>
+)
+
+ALL_PORTS=(
+   [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=1234
+   [<span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>]=5678
+)</pre></div>
+
+<p>Then you can manage multiple instances of <code>GraphDash</code> using <code>Gunicorn</code> with:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ GraphDashManage start prod
+[INFO] Listening at: http://0.0.0.0:1234
+[INFO] Booting worker with pid: 30403
+[INFO] Booting worker with pid: 30404
+[INFO] Booting worker with pid: 30405
+
+$ GraphDashManage start <span class="pl-c1">test</span>
+[INFO] Listening at: http://0.0.0.0:5678
+...</pre></div>
+
+<p>You can generate a template of such file with:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ GraphDashManage template <span class="pl-k">&gt;</span> template.sh <span class="pl-c"># to be moved to settings.sh</span></pre></div>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/AmadeusITGroup/GraphDash">GraphDash</a> is maintained by <a href="https://github.com/AmadeusITGroup">AmadeusITGroup</a>.</span>
