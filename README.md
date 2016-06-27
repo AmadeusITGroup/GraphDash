@@ -240,7 +240,7 @@ $ GraphDashManage start normal
 $ GraphDashManage start test
 $ GraphDashManage reload test
 $ GraphDashManage
-Usage: GraphDashManage.sh (start|stop|restart|forcestop|reload|increment|decrement|status|fullstatus|template) [mode1 [mode2...]]
+Usage: GraphDashManage (start|stop|restart|forcestop|reload|status|fullstatus|template) [mode1 [mode2...]]
 
 Use Gunicorn to serve GraphDash instances described in settings.sh.
 

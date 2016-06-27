@@ -9,12 +9,8 @@ from __future__ import with_statement
 import sys
 from setuptools import setup, find_packages
 
-with open('VERSION') as f:
-    VERSION = f.read().rstrip()
-
 with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
-
 
 INSTALL_REQUIRES = [
     'argparse',
@@ -30,11 +26,11 @@ if sys.version_info[0] < 3:
 
 setup(
     name='GraphDash',
-    version=VERSION,
+    version='0.8',
     author='Alex Prengère',
     author_email='alexprengere@amadeus.com',
     url='https://github.com/AmadeusITGroup/graphdash',
-    description='A dashboard for graphs.',
+    description='A web-based dashboard built on graphs and their metadata.',
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
     package_data={
