@@ -20,7 +20,7 @@
 
     <section class="main-content">
       <p><code>GraphDash</code> is a web-based dashboard built on graphs and their metadata.
-For example, if you have in a directory:</p>
+For example, if you have:</p>
 
 <div class="highlight highlight-source-shell"><pre>$ ls default_graph_dir
 graph.svg
@@ -95,10 +95,6 @@ With <code>Gunicorn</code>, you can pass environment variables to the workers wi
 
 <div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app <span class="pl-k">&amp;</span></pre></div>
 
-<p>Then you can restart the server by sending a <code>HUP</code> signal:</p>
-
-<div class="highlight highlight-source-shell"><pre><span class="pl-c1">kill</span> -HUP <span class="pl-s"><span class="pl-pds">`</span>cat server.pid<span class="pl-pds">`</span></span> <span class="pl-c"># restart!</span></pre></div>
-
 <p>But you should <em>not</em> use these commands yourself, that is what <code>GraphDashManage</code> is for!</p>
 
 <h2>
@@ -131,7 +127,7 @@ $ GraphDashManage start <span class="pl-c1">test</span>
 [INFO] Listening at: http://0.0.0.0:5678
 ...</pre></div>
 
-<p>You can generate a template of such file with:</p>
+<p>You can generate a template of settings:</p>
 
 <div class="highlight highlight-source-shell"><pre>$ GraphDashManage template <span class="pl-k">&gt;</span> template.sh <span class="pl-c"># to be moved to settings.sh</span></pre></div>
 
