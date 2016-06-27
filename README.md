@@ -10,7 +10,7 @@ Introduction
 For example, if you have in a directory:
 
 ```bash
-$ ls example_graph_dir
+$ ls default_graph_dir
 graph.svg
 graph.txt
 ```
@@ -18,7 +18,7 @@ graph.txt
 The svg file is the graph, and must have metadata with YAML format:
 
 ```bash
-$ cat example_graph_dir/graph.txt
+$ cat default_graph_dir/graph.txt
 name: graph.svg
 title: "A nice graph"
 family: Weather
@@ -30,7 +30,7 @@ graph dashboard. You will get a web interface with search box,
 autocompletion and easy navigation.
 
 ```bash
-GraphDash -r example_graph_dir
+GraphDash -r default_graph_dir
 ```
 
 Installation
@@ -59,15 +59,15 @@ Just do (`$PATH` should include `~/.local/bin` if installation in user
 space):
 
 ```bash
-GraphDash -r example_graph_dir
+GraphDash -r default_graph_dir
 ```
 
 The dashboard can be configured with a configuration file like this
 (also YAML):
 
 ```bash
-$ cat example.conf
-root: example_graph_dir
+$ cat docs/example.conf
+root: default_graph_dir
 title: "Default title"
 subtitle: "Default subtitle"
 ```
@@ -75,7 +75,7 @@ subtitle: "Default subtitle"
 Then use `-c` to use it:
 
 ```bash
-GraphDash -c example.conf
+GraphDash -c docs/example.conf
 ```
 
 You can generate a template of configuration file like this:
@@ -105,7 +105,7 @@ environment variable. With `Gunicorn`, you can pass environment variables
 to the workers with `--env`, so you can do:
 
 ```bash
-gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=example.conf graphdash:app &
+gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app &
 ```
 
 With `Gunicorn`, you can restart the server by sending a `HUP` signal:
@@ -216,8 +216,8 @@ configuration file like this in the current directory:
 ```bash
 $ cat settings.sh
 ALL_MODES=(
-   ['prod']="example.conf"
-   ['test']="example.conf"
+   ['prod']="docs/example.conf"
+   ['test']="docs/example.conf"
 )
 
 ALL_PORTS=(

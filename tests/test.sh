@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 cd `dirname $0`
-cd .. # root repo
-
 set -e
 
 PIDF="test.pid"
@@ -37,7 +35,7 @@ echo -e "\n> Serving with `which gunicorn`"
 gunicorn --error-logfile=-           \
          --access-logfile=-          \
          --bind $BIND                \
-         --env CONF=./test/test.conf \
+         --env CONF=test.conf        \
          --pid=$PIDF graphdash:app   \
          &
 echo "Sleeping 3"

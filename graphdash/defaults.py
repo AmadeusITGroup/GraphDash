@@ -73,7 +73,7 @@ def default_conf():
     """Default configuration.
     """
     return SemiFrozenDict({
-        'root'              : 'example_graph_dir',
+        'root'              : 'default_graph_dir',
         'families'          : None,
         'title'             : 'Default title',
         'subtitle'          : 'Default subtitle',

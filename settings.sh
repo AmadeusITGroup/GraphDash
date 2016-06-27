@@ -1,6 +1,6 @@
 ALL_MODES=(
-    ['prod']="example.conf"
-    ['test']="example.conf"
+    ['prod']="docs/example.conf"
+    ['test']="docs/example.conf"
 )
 
 ALL_PORTS=(

@@ -1,5 +1,7 @@
 recursive-include graphdash *
-recursive-include example_graph_dir *
+recursive-include default_graph_dir *
 recursive-include test *
-include *.conf *.md *.ini *.cfg Gruntfile.js package.json LICENSE
+recursive-include docs *
+include README.md tox.ini setup.cfg Gruntfile.js package.json LICENSE
+include Gruntfile.js package.json
 include GraphDashManage settings.sh
