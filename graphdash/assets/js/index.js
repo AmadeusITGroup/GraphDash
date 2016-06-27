@@ -1,6 +1,6 @@
 (function() {
   var getParameterByName,
-    __slice = [].slice;
+    slice = [].slice;
 
   getParameterByName = function(name) {
     var regex, results;
@@ -55,11 +55,11 @@
       return encodeURI(context);
     });
     Handlebars.registerHelper("generate_parents", function(context, options) {
-      var families, i, ret, up_url, _i, _ref;
+      var families, i, j, ref, ret, up_url;
       if (context) {
         families = context.split('/');
         ret = '';
-        for (i = _i = 0, _ref = families.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = j = 0, ref = families.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
           up_url = families.slice(0, +i + 1 || 9e9).join('/');
           ret += options.fn({
             up_url: up_url,
@@ -104,15 +104,15 @@
       type: "get"
     }).done(function(response, textStatus, jqXHR) {
       var t, tags;
-      tags = __slice.call(response.tags).concat(__slice.call((function() {
-          var _i, _len, _ref, _results;
-          _ref = response.tags;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            t = _ref[_i];
-            _results.push('-' + t);
+      tags = slice.call(response.tags).concat(slice.call((function() {
+          var j, len, ref, results1;
+          ref = response.tags;
+          results1 = [];
+          for (j = 0, len = ref.length; j < len; j++) {
+            t = ref[j];
+            results1.push('-' + t);
           }
-          return _results;
+          return results1;
         })()));
       $("#box").autocomplete({
         minLength: 0,
