@@ -1,0 +1,252 @@
+
+/* Default theme, only applied if those are not defined */
+$font-stack: monospace, serif !default
+$bg-color:              black !default
+$fg-color:              white !default
+$bg-color-hover:        yellow !default
+$fg-color-hover:        black !default
+$bg-color-selected:     white !default
+$fg-color-selected:     black !default
+$fg-color-link:         yellow !default
+$fg-color-link-visited: yellow !default
+$bg-color-button:       blue !default
+$bg-color-unsubmitted:  black !default
+
+/* Style */
+.style
+  background-image: none
+  background-color: $bg-color
+  color:            $fg-color
+
+textarea,body,input,button,td,tr,p
+  @extend .style
+  font-family: $font-stack
+
+pre
+  @extend .style
+  font-family: monospace
+
+a
+  color: $fg-color-link
+
+a:visited
+  color: $fg-color-link-visited
+
+.ui-autocomplete .ui-menu-item
+  background-color: $bg-color
+  color:            $fg-color
+  font-size: medium
+  font-family: $font-stack
+
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus
+  background: $bg-color-hover
+  color:      $fg-color-hover
+
+/* Format */
+=left
+  text-align: left
+
+=right
+  text-align: right
+
+=center
+  text-align: center
+
+=marpad($mar, $pad)
+  margin: $mar
+  padding: $pad
+
+=vmargin($mar)
+  margin-top: $mar
+  margin-bottom: $mar
+
+=border-radius($radius)
+  -webkit-border-radius: $radius
+  -moz-border-radius:    $radius
+  -ms-border-radius:     $radius
+  border-radius:         $radius
+
+=buttonstyle($bordersize)
+  display: inline-block
+  text-align: center
+  padding: .2em 0.5em .35em
+  outline: none
+  cursor: pointer
+  background: $bg-color-button
+  border: solid $bordersize $fg-color
+  border-radius: .3em
+  text-decoration: none
+  &:hover
+    background: $bg-color-hover
+    color:      $fg-color-hover
+  &:active
+    position: relative
+    top: 1px
+
+.selected
+  background: $bg-color-selected !important
+  color:      $fg-color-selected !important
+
+html
+  margin-top: 0px
+  margin-bottom: 20px
+
+body
+  width: 100%
+  margin: auto
+
+h1
+  margin-bottom: 5px
+
+h2,h3,h4
+  font-style: italic
+
+.title
+  +center
+  +vmargin(20px)
+
+.value
+  text-decoration: underline
+
+#subtitle
+  +vmargin(0px)
+  font-style: italic
+  font-size: large
+
+#theform
+  +center
+  +vmargin(20px)
+
+#main_index
+  width: 75%
+  margin: auto
+  & a
+    +buttonstyle(0px)
+    +left
+
+#header, #footer, #text
+  +vmargin(20px)
+
+$sidebarsize: 365px
+$marginsize: 10px
+
+#sidemenu
+  position: fixed
+  top:   $marginsize
+  left:  0px
+  width: $sidebarsize
+  height: 100%
+  overflow-y: auto
+  border: 0px
+  & a
+    +buttonstyle(0px)
+    +left
+
+.nomark
+  list-style-type: none
+
+.smallindent
+  padding-left: 30px
+
+.noindent
+  padding-left: 0px
+
+#menupath
+  margin-left: $marginsize
+
+#menulinks
+  +vmargin(20px)
+  font-size: small
+
+#main_family, #title_family
+  margin-left: $marginsize + $sidebarsize
+  margin-right: $marginsize
+
+$buttonsize : 200px
+input
+  +border-radius(3px)
+  +marpad(2px, 8px)
+  border: solid 1px $fg-color
+  font-size: medium
+  width: 2 * ($buttonsize - 7)
+
+button
+  +buttonstyle(1px)
+  +marpad(0px, 2px)
+  font-size: medium
+  width: $buttonsize
+
+#togglecontainer
+  position: absolute
+
+#togglebutton
+  +buttonstyle(0px)
+  font-size: xx-large
+  width: auto
+  padding: 0px 8px 0px 8px
+  +border-radius(6px)
+
+ol,ul
+  margin: 1px
+  & li
+    margin: 1px
+
+.notsubmitted
+  background-color: $bg-color-unsubmitted !important
+
+.graph
+  +center
+  margin: 10px
+
+.freetext
+  +left
+  width: 100%
+  margin: auto
+
+.description
+  +left
+  width: 60%
+  margin: auto
+  +vmargin(10px)
+
+.titlebox
+  +marpad(0px, 0px)
+  font-size: small
+
+.linkbox
+  float: right
+  font-size: small
+  & a
+    font-size: small
+    +buttonstyle(0px)
+
+.tagbox
+  margin-top: 20px
+  font-style: italic
+  font-size: small
+  & a
+    font-size: small
+    +buttonstyle(0px)
+
+.flash
+  font-style: italic
+  font-size: large
+
+.label
+  +border-radius(20px)
+  font-size: 0.7em
+  font-style: italic
+  padding: 6px
+  margin-left: 3px
+  white-space: nowrap
+  line-height: 27px
+
+img, embed
+  max-width: 100%
+  max-height: 100%
+

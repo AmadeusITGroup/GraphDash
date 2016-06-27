@@ -1,0 +1,11 @@
+name: graph.png
+family: Other family
+title: Another graph, again
+export: graph.png
+file: data.csv
+index:
+- category
+labels: new
+showtitle: true
+text: |
+    The description

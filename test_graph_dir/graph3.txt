@@ -1,0 +1,26 @@
+name: graph.svg
+family: 4
+title: '*Very serious* graph'
+export: graph.png
+file: data.csv
+labels: {name: testing_dict, color: black, text: "TESTING_DICT", lolo: 3, tooltip: this is a custom tooltip}
+index:
+- category
+text: |
+         title
+         -----
+         This is the *overall* data.
+
+         ```bash
+         $ some code
+         ```
+
+         ```python
+         i = 0
+         def f():
+            return 2
+         ```
+other:
+- This is additional data, ignored by UI
+titi≤toto:
+- This will raise a warning, as the 'titi' key is not expected

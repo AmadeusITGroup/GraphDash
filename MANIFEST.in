@@ -1,0 +1,5 @@
+recursive-include graphdash *
+recursive-include example_graph_dir *
+recursive-include test *
+include *.conf *.md *.rst *.txt *.ini VERSION Gruntfile.js package.json
+include GraphDashManage.sh GraphDashManage

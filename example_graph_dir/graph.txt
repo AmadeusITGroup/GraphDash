@@ -1,0 +1,21 @@
+name: graph.svg
+family: Category 1
+title: '*Real serious* graph'
+export: graph.png
+file: data.csv
+labels: new
+index: keyword
+text: |
+         title
+         -----
+         This is the *overall* data.
+
+         ```bash
+         $ some code
+         ```
+
+         ```python
+         i = 0
+         def f():
+            return 2
+         ```

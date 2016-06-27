@@ -1,0 +1,120 @@
+{% from 'macros.html' import render_labels %}
+{% extends "base.html" %}
+
+{% block js %}
+    {{ super() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+
+    <script src="{{ url_for('get_asset', filename='js/family.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="title_family" class="title">
+        <div id="togglecontainer">
+            <button id="togglebutton" title="Collapse/restore the menu.">⇤</button>
+        </div>
+        <h1>{{ conf.title }}</h1>
+        {% if conf.subtitle %}
+        <p id="subtitle">{{ conf.subtitle }}</p>
+        {% endif %}
+    </div>
+
+    <div id="sidemenu">
+    <div id="menupath">
+    <a href="{{ url_for('index') }}">Home</a>
+    {% for up_tuple in up_paths(family, include_root=False) %}
+    <ul class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
+        <li>
+        <a href="{{ url_for('family_index', family='/'.join(up_tuple)) }}">{{ get(up_tuple).alias }}</a>
+    {% endfor %}
+    {% for _ in up_paths(family, include_root=False) %}
+        </li>
+    </ul>
+    {% endfor %}
+    </div>
+
+    <div id="menulinks">
+    <ol class="{{ 'smallindent' if conf.showgraphnumbers else 'noindent nomark' }}">
+    {% for graph in graphs %}
+    <li>
+        <a href="#{{ graph.id }}" title="{{ graph.text }}">{{ graph.title |mdi |safe }}</a>
+        {{ render_labels(graph.labels) }}
+    </li>
+    {% endfor %}
+    </ol>
+    </div>
+
+    </div>
+
+    <div id="main_family">
+    {% if text %}
+    <div id="text">{{ text |md |safe }}</div>
+    {% endif %}
+
+    {% for graph in graphs %}
+    <div>
+
+    <a id="{{ graph.id }}"></a>
+    <hr/>
+    <div class="linkbox">
+        {% if graph.name %}
+        <a href="{{ url_for('get_data', filename=graph.name) }}">View full screen</a>
+        {% endif %}
+
+        {% if graph.export %}
+        <a href="{{ url_for('get_data', filename=graph.export) }}">Export graph</a>
+        {% endif %}
+
+        {% if graph.file %}
+        <a href="{{ url_for('get_data', filename=graph.file) }}">Get raw data</a>
+        {% endif %}
+
+        <a href="#{{ graph.id }}">Permalink</a>
+    </div>
+
+    <p class="titlebox">
+        {{ loop.index }} / {{ loop.length }}
+        {% if graph.showtitle %}
+            &emsp;{{ graph.title |mdi |safe }}
+        {% endif %}
+        {{ render_labels(graph.labels) }}
+    </p>
+
+    {% if graph.pretext %}
+    <div class="{{ 'description' if graph.name else 'freetext' }}">
+        {{ graph.pretext |md |safe }}
+    </div>
+    {% endif %}
+
+    {% if graph.name %}
+    <div class="graph">
+        {% set url = url_for('get_data', filename=graph.name) %}
+        {% if graph.name.lower().endswith('.svg') %}
+            <figure><embed type="image/svg+xml" src="{{ url }}"></figure>
+        {% else %}
+            <img data-original="{{ url }}" alt="{{ graph.name }}">
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% if graph.text %}
+    <div class="{{ 'description' if graph.name else 'freetext' }}">
+        {{ graph.text |md |safe }}
+    </div>
+    {% endif %}
+
+    {% if graph.index %}
+    <div class="tagbox">
+        Tags:&emsp;
+        {% for word in graph.index |sortindexes %}
+        <a href="{{ url_for('family_index', family=None, search=word) }}">{{ word }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    </div>
+    {% endfor %}
+
+    </div>
+
+{% endblock %}

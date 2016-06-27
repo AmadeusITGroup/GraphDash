@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+
+set -e
+
+FILE="settings.sh"
+
+USAGE="Usage: `basename $0` (start|stop|restart|forcestop|reload|increment|decrement|status|fullstatus|template) [mode1 [mode2...]]"
+
+HELP="\
+
+Use Gunicorn to serve GraphDash instances described in $FILE.
+
+start       : start servers
+stop        : gracefully stop servers (QUIT signal)
+restart     : gracefully stop servers (QUIT signal), wait for processes to finish, then start servers
+forcestop   : force stop servers (KILL signal)
+reload      : reload servers (HUP signal)
+increment   : increment number of workers (TTIN signal)
+decrement   : decrement number of workers (TTOU signal)
+status      : display status of servers
+fullstatus  : display status of all servers
+template    : display an template of $FILE"
+
+TEMPLATE="\
+#
+# This is an template of possible $FILE file for GraphDashManage.
+# Store this output and use it like this:
+#
+# GraphDashManage template > $FILE
+# GraphDashManage start mode1
+# GraphDashManage start mode2
+# GraphDashManage fullstatus
+# GraphDashManage stop mode1 mode2
+#
+ALL_MODES=(
+    [mode1]='example.conf'
+    [mode2]='example.conf'
+)
+
+ALL_PORTS=(
+    [mode1]=5555
+    [mode2]=6666
+)
+
+WORKERS=1"
+
+check_settings () {
+    if [ ! -f "$FILE" ]; then
+        echo
+        echo "File $FILE not found in local directory. You may generate a template with:"
+        echo "$ GraphDashManage template > $FILE"
+        exit 1
+    fi
+}
+
+waitfor () {
+    local p="$1"
+    while ps -p "$p" > /dev/null; do
+        echo "Waiting for $p to finish..."
+        sleep 0.5
+    done;
+    echo "Process $p is finished!"
+}
+
+# Parsing parameters
+#
+ACTION=$1
+case "$ACTION" in
+    start|stop|restart|forcestop|reload|increment|decrement|status|fullstatus)
+        ;;
+    template)
+        echo "$TEMPLATE"
+        exit 0
+        ;;
+    *)
+        echo "$USAGE"
+        echo "$HELP"
+        check_settings
+        exit 1
+        ;;
+esac
+
+# Settings file
+#
+declare -A ALL_MODES ALL_PORTS # associative arrays
+WORKERS=2
+
+check_settings # exit if no settings file
+. "$FILE"      # overriding when sourcing settings file
+
+
+# Handling fullstatus
+#
+MODES=${@:2}
+MACHINE=$(hostname -s)
+
+if [ "$ACTION" = "fullstatus" ]; then
+    ACTION="status"
+    MODES=${!ALL_MODES[@]}
+
+elif [ ! "$MODES" ]; then
+    echo "$USAGE"
+    echo "Missing mode. Available modes: ${!ALL_MODES[@]}"
+    exit 1
+fi
+
+# Actual stuff
+#
+for m in $MODES; do
+    CONF="${ALL_MODES[$m]}"
+    PORT="${ALL_PORTS[$m]}"
+    NAME="graphdash_$m on $PORT"
+    PIDF="server_$m.$MACHINE.pid"
+
+    if [ ! "${PORT}" ]; then
+        echo "\"$m\" not one of the available modes: ${!ALL_MODES[@]}"
+        continue
+    fi
+
+    case "$ACTION" in
+        start)
+            ;;
+        restart)
+            # No pid file is ok, "restart" becomes "start"
+            if [ ! -f "$PIDF" ]; then
+                ACTION="start"
+            else
+                PID="`cat $PIDF`"
+            fi
+            ;;
+        *)
+            # All cases where we *need* the pid file to be there
+            if [ ! -f "$PIDF" ]; then
+                printf "[%-10s] file $PIDF *not* found\n" "$m"
+                continue # skipping second case statement
+            fi
+            PID="`cat $PIDF`"
+            ;;
+    esac
+
+    do_start () {
+        gunicorn --error-logfile=- --access-logfile=- --workers $WORKERS -b "0.0.0.0:$PORT" -p "$PIDF" -e CONF="$CONF" -n "$NAME" graphdash:app &
+    }
+
+    do_stop () {
+        kill -QUIT "$PID"
+    }
+
+    case "$ACTION" in
+        start)
+            do_start
+            ;;
+        stop)
+            do_stop
+            ;;
+        restart)
+            do_stop || echo "Could not kill pid $PID, going on..."
+            waitfor "$PID"
+            do_start
+            ;;
+        forcestop)
+            kill -KILL "$PID"
+            ;;
+        reload)
+            kill -HUP "$PID"
+            ;;
+        increment)
+            kill -TTIN "$PID"
+            ;;
+        decrement)
+            kill -TTOU "$PID"
+            ;;
+        status)
+            printf "[%-10s] file $PIDF found with pid $PID, " "$m"
+
+            if ps -p "$PID" > /dev/null 2>&1; then
+                echo "and process running (port $PORT in settings)"
+            else
+                echo "but process *not* running"
+            fi
+            ;;
+    esac
+done
+

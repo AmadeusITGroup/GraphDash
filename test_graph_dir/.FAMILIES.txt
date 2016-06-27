@@ -1,0 +1,26 @@
+- alias: z
+  family: 4
+- alias: Fam*il*y
+  family: cat
+  rank : 1
+  text: This is a explanation
+- family: Other family
+  rank : 0
+  text: This is a *explanation*
+- family: []
+  rank : 0
+- alias: Simple Blog Entry
+  family: blog
+  text: This is a explanation
+  labels:
+  - name: newfamilylabel
+    color: white
+    text_color: black
+    text: "NEW FAMILY LABEL"
+  - name: newfamilylabel
+    color: white
+    text_color: black
+    text: "NEW FAMILY LABEL 2"
+- alias: Subcategory
+  family: [cat, sub]
+  labels: ["new", "update", "bugfix", "warning", "error", "ongoing", "obsolete", "lol"]

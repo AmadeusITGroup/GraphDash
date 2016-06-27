@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block js %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div id="title_index" class="title">
+        <h1>404</h1>
+        <p id="subtitle">Oups! Something went wrong...</p>
+    </div>
+
+    <div id="main_index">
+        <br/>
+        If it's a problem, please try to report it.
+        <br/>
+        <br/>
+        <a href="{{ url_for('index') }}">Home</a>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+family: blog
+file: entry.txt
+title: '*Entry 1*'
+text: |
+         Today
+         -----
+         This is an example.
+
+         ```python
+         i = 0
+         def f():
+            return 2
+         ```

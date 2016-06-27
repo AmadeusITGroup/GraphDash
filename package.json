@@ -1,0 +1,14 @@
+{
+    "name": "GraphDash",
+        "version": "0.1.0",
+        "devDependencies": {
+            "grunt"                : "~0.4",
+            "grunt-shell"          : "*",
+            "grunt-contrib-sass"   : "*",
+            "grunt-contrib-cssmin" : "*",
+            "grunt-contrib-coffee" : "*",
+            "grunt-contrib-jshint" : "*",
+            "grunt-contrib-uglify" : "*",
+            "grunt-contrib-watch"  : "*"
+        }
+}

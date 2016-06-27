@@ -1,0 +1,9 @@
+name: graph.svg
+family: Category 1
+title: Another important graph, again
+export: graph.png
+file: data.csv
+index:
+- keyword2
+text: |
+    The description

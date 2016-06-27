@@ -1,0 +1,121 @@
+{% from 'macros.html' import render_labels %}
+{% extends "base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css"/>
+    {{ super() }}
+{% endblock %}
+
+{% block js %}
+    {{ super() }}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
+    <script>
+        URL_TAGS = "{{ url_for('get_tags') }}";
+        URL_SEARCH = "{{ url_for('search') }}";
+        URL_FAMILY = "{{ url_for('family_index') }}";
+    </script>
+    <script src="{{ url_for('get_asset', filename='js/index.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="title_index" class="title">
+        <h1>{{ conf.title }}</h1>
+        {% if conf.subtitle %}
+        <p id="subtitle">{{ conf.subtitle }}</p>
+        {% endif %}
+    </div>
+
+    <div id="main_index">
+
+    <div id="theform">
+        <form method="get" id="form" action="{{ url_for('search') }}">
+            <input id="box" type="text" placeholder="{{ conf.placeholder }}" value="" title="Leave empty to show everything!"/>
+        </form>
+        <div>
+            <button id="searchbutton">search</button>
+            <button id="clearbutton">clear</button>
+        </div>
+    </div>
+
+    <script id="response-template" type="text/x-handlebars-template">
+    {% raw %}
+        <h3>{{#if inner_value}}<span class="value">{{inner_value}}</span>{{else}}''{{/if}} matches {{nb_matches}} out of {{nb_total}}{{#if outer_value}} <span class="value">{{outer_value}}</span>{{/if}} ({{ratio}}%)</h3>
+        {% endraw %}
+        <ul class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
+        {% raw %}
+        {{#families}}
+            <li>
+            {{#generate_parents this aliases=@root.aliases}}
+                <a href="{{uri @root.url}}{{uri this.up_url}}">{{{this.up_name}}}</a>
+            {{/generate_parents}}
+            </li>
+            {% endraw %}
+            <ol class="{{ '' if conf.showgraphnumbers else 'nomark' }}">
+            {% raw %}
+            {{#withObj @root.matches key=this}}
+            {{#each this}}
+                <li>
+                <a href="{{uri @root.url}}{{uri ../../this}}#{{id}}" title="{{text}}">{{{title}}}</a>
+                {{#labels}}
+                    <span class="label" style="background-color:{{this.color}};color:{{this.text_color}};" title="{{this.tooltip}}">{{this.text}}</span>
+                {{/labels}}
+                </li>
+            {{/each}}
+            {{/withObj}}
+            </ol>
+            <br/>
+        {{/families}}
+        </ul>
+    {% endraw %}
+    </script>
+    <div id="response"></div>
+
+    {% if conf.header %}
+    <div id="header">{{ conf.header |md |safe }}</div>
+    {% endif %}
+
+    <div>
+    <hr/>
+
+    <h2>Browse</h2>
+    <a href="{{ url_for('index') }}">Home</a>
+    {% for up_tuple in up_paths(family, include_root=False) %}
+    <ul class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
+        <li>
+        <a href="{{ url_for('family_index', family='/'.join(up_tuple)) }}">{{ get(up_tuple).alias }}</a>
+        {% if text %}
+        <div id="text">{{ text |md |safe }}</div>
+        {% endif %}
+    {% endfor %}
+        <ol class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
+        {% for (son_name, son) in sons.iteritems() |sortsons %}
+            {% set d = son.data.graphs |length %}
+            {% set s = son.sons        |length %}
+
+            {% set l = [] %}
+            {% do d >= 1 and l.append('{0}'.format(d)) %}
+            {% do s == 1 and l.append('<i>{0} sub-family</i>'.format(s)) %}
+            {% do s >= 2 and l.append('<i>{0} sub-families</i>'.format(s)) %}
+
+            {% set son_tuple = family + (son_name,) %}
+            <li>
+            <a href="{{ url_for('family_index', family='/'.join(son_tuple)) }}" title="{{ son.data.text }}">
+                {{ get(son_tuple).alias }} ({{ ',  '.join(l) |safe }})
+            </a>
+            {{ render_labels(son.data.labels) }}
+            </li>
+        {% endfor %}
+        </ol>
+    {% for _ in up_paths(family, include_root=False) %}
+        </li>
+    </ul>
+    {% endfor %}
+
+    </div>
+
+    {% if conf.footer %}
+    <div id="footer">{{ conf.footer |md |safe }}</div>
+    {% endif %}
+
+    </div>
+{% endblock %}

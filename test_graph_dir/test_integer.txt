@@ -1,0 +1,9 @@
+name: graph.svg
+family: 348
+title: 71743
+export: graph.png
+file: data.csv
+labels: 256
+index:
+- 452
+text: 12

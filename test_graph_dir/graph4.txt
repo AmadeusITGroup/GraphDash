@@ -1,0 +1,11 @@
+name: graph.png
+family: []
+export: graph.png
+file: data.csv
+index:
+- category
+pretext: |
+    The pre description
+text: |
+    The description
+showtitle: true

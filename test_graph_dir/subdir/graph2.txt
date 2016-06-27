@@ -1,0 +1,10 @@
+name: ../graph.svg
+family: Other family
+title: Yet Another graph
+rank: 0
+export: ../graph.png
+file: toto.csv
+index:
+- category
+text: |
+    The description

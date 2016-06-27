@@ -1,0 +1,12 @@
+*.sw[po]
+*.pyc
+*.log
+*.log.*
+.env
+*.pid
+dist/
+build/
+*.egg-info
+.sass-cache/
+node_modules/
+.tox

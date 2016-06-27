@@ -1,0 +1,5 @@
+{% macro render_labels(labels) -%}
+{% for label in labels |sortlabels %}
+    <span class="label" style="background-color:{{ label.color }}; color:{{ label.text_color }};" title="{{ label.tooltip }}">{{ label.text }}</span>
+{% endfor %}
+{%- endmacro %}

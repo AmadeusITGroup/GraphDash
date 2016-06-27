@@ -1,0 +1,18 @@
+name: graph.png
+family: Default
+title: Another important graph
+export: graph.png
+file: data.csv
+labels:
+- www
+- important
+- very important
+- name: new label
+  color: black
+  text: "NEW LABEL"
+  lolo: 3
+index:
+- category
+- index with spaces
+text: |
+    The description
