@@ -34,11 +34,11 @@ assert_code () {
 }
 
 echo -e "\n> Serving with `which gunicorn`"
-gunicorn --error-logfile=-          \
-         --access-logfile=-         \
-         --bind $BIND               \
-         --env CONF=example.conf    \
-         --pid=$PIDF graphdash:app  \
+gunicorn --error-logfile=-           \
+         --access-logfile=-          \
+         --bind $BIND                \
+         --env CONF=./test/test.conf \
+         --pid=$PIDF graphdash:app   \
          &
 echo "Sleeping 3"
 sleep 3
@@ -47,7 +47,7 @@ echo -e "\n> Testing"
 assert_code 302 "http://$BIND/"
 assert_code 200 "http://$BIND/tags"
 assert_code 200 "http://$BIND/family/"
-assert_code 200 "http://$BIND/family/Category%201"
+assert_code 200 "http://$BIND/family/cat"
 assert_code 200 "http://$BIND/search?value=*"
 assert_code 200 "http://$BIND/search?value=find"
 assert_code 404 "http://$BIND/nonexistent"
