@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Graphdash by AmadeusITGroup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Graphdash</h1>
+      <h2 class="project-tagline">Web-based dashboard built on graphs and their metadata</h2>
+      <a href="https://github.com/AmadeusITGroup/GraphDash" class="btn">View on GitHub</a>
+      <a href="https://github.com/AmadeusITGroup/GraphDash/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/AmadeusITGroup/GraphDash/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <p><img src="example.gif" alt=""></p>
+
+<h2>
+<a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p><code>GraphDash</code> is a web-based dashboard built on graphs and their metadata.
+For example, if you have in a directory:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ ls example_graph_dir
+graph.svg
+graph.txt</pre></div>
+
+<p>The svg file is the graph, and must have metadata with YAML format:</p>
+
+<div class="highlight highlight-source-shell"><pre>$ cat example_graph_dir/graph.txt
+name: graph.svg
+title: <span class="pl-s"><span class="pl-pds">"</span>A nice graph<span class="pl-pds">"</span></span>
+family: Weather
+text: This is the text under the graph.</pre></div>
+
+<p>You can put as many graphs as you want in the directory, then start the
+graph dashboard. You will get a web interface with search box,
+autocompletion and easy navigation.</p>
+
+<div class="highlight highlight-source-shell"><pre>GraphDash -r example_graph_dir</pre></div>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Clone and install (in user space):</p>
+
+<div class="highlight highlight-source-shell"><pre>git clone https://github.com/AmadeusITGroup/graphdash.git
+<span class="pl-c1">cd</span> graphdash
+pip install --user <span class="pl-c1">.</span></pre></div>
+
+<p>Or install in a <code>virtualenv</code>:</p>
+
+<div class="highlight highlight-source-shell"><pre>virtualenv --clear --no-site-packages .env
+<span class="pl-c1">source</span> .env/bin/activate
+pip install <span class="pl-c1">.</span></pre></div>
+
+<h2>
+<a id="launch-the-webapp" class="anchor" href="#launch-the-webapp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Launch the webapp</h2>
+
+<p>Just do (<code>$PATH</code> should include <code>~/.local/bin</code> if installation in user
+space):</p>
+
+<div class="highlight highlight-source-shell"><pre>GraphDash -r example_graph_dir</pre></div>
+
+<p>The dashboard can be configured with a configuration file like this
+(also YAML):</p>
+
+<div class="highlight highlight-source-shell"><pre>$ cat example.conf
+root: example_graph_dir
+title: <span class="pl-s"><span class="pl-pds">"</span>Default title<span class="pl-pds">"</span></span>
+subtitle: <span class="pl-s"><span class="pl-pds">"</span>Default subtitle<span class="pl-pds">"</span></span></pre></div>
+
+<p>Then use <code>-c</code> to use it:</p>
+
+<div class="highlight highlight-source-shell"><pre>GraphDash -c example.conf</pre></div>
+
+<p>You can generate a template of configuration file like this:</p>
+
+<div class="highlight highlight-source-shell"><pre>GraphDash -C template.conf</pre></div>
+
+<h2>
+<a id="serve-with-gunicorn" class="anchor" href="#serve-with-gunicorn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Serve with Gunicorn</h2>
+
+<p>If not already installed on your machine, install <code>Gunicorn</code>:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c"># On Fedora you may need to do beforehand as root: yum install libffi-devel</span>
+pip install --user gunicorn</pre></div>
+
+<p>You can import the webapp through <code>graphdash:app</code>, so using <code>Gunicorn</code>:</p>
+
+<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid graphdash:app <span class="pl-k">&amp;</span></pre></div>
+
+<p>The configuration file of the webapp can be searched using the <code>CONF</code>
+environment variable. With <code>Gunicorn</code>, you can pass environment variables
+to the workers with <code>--env</code>, so you can do:</p>
+
+<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=example.conf graphdash:app <span class="pl-k">&amp;</span></pre></div>
+
+<p>With <code>Gunicorn</code>, you can restart the server by sending a <code>HUP</code> signal:</p>
+
+<div class="highlight highlight-source-shell"><pre><span class="pl-c1">kill</span> -HUP <span class="pl-s"><span class="pl-pds">`</span>cat server.pid<span class="pl-pds">`</span></span> <span class="pl-c"># restart !</span></pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/AmadeusITGroup/GraphDash">Graphdash</a> is maintained by <a href="https://github.com/AmadeusITGroup">AmadeusITGroup</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
