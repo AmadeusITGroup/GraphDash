@@ -2,7 +2,7 @@
 *.pyc
 *.log
 *.log.*
-.env
+.env*
 *.pid
 dist/
 build/
