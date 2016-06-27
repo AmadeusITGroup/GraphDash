@@ -1,7 +1,7 @@
 GraphDash
 =========
 
-![](example.gif)
+![](docs/example.gif)
 
 Introduction
 ------------
