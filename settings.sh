@@ -1,10 +1,10 @@
 ALL_MODES=(
-    ['normal']="example.conf"
+    ['prod']="example.conf"
     ['test']="example.conf"
 )
 
 ALL_PORTS=(
-    ['normal']=1234
+    ['prod']=1234
     ['test']=5678
 )
 

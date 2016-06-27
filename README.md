@@ -216,12 +216,12 @@ configuration file like this in the current directory:
 ```bash
 $ cat settings.sh
 ALL_MODES=(
-   ['normal']="example.conf"
+   ['prod']="example.conf"
    ['test']="example.conf"
 )
 
 ALL_PORTS=(
-   ['normal']=1234
+   ['prod']=1234
    ['test']=5678
 )
 ```
@@ -236,7 +236,7 @@ Then you can use the script to manage multiple instances of `GraphDash`
 (with `Gunicorn`):
 
 ```bash
-$ GraphDashManage start normal
+$ GraphDashManage start prod
 $ GraphDashManage start test
 $ GraphDashManage reload test
 $ GraphDashManage
