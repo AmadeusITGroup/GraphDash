@@ -86,12 +86,12 @@ $ GraphDash -c docs/example.conf
 
 <p>Since you can import the webapp through <code>graphdash:app</code>, you can serve it with <code>Gunicorn</code>:</p>
 
-<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid graphdash:app <span class="pl-k">&amp;</span></pre></div>
+<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid graphdash:app</pre></div>
 
 <p>The configuration file of the webapp can be set with the <code>CONF</code> environment variable.
 With <code>Gunicorn</code>, you can pass environment variables to the workers with <code>--env</code>:</p>
 
-<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app <span class="pl-k">&amp;</span></pre></div>
+<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app</pre></div>
 
 <p>But you should <em>not</em> use these commands yourself, that is what <code>GraphDashManage</code> is for!</p>
 
@@ -107,11 +107,11 @@ ALL_MODES=(
    [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/example.conf<span class="pl-pds">"</span></span>
    [<span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/example.conf<span class="pl-pds">"</span></span>
 )
-
 ALL_PORTS=(
    [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=1234
    [<span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>]=5678
-)</pre></div>
+)
+WORKERS=3</pre></div>
 
 <p>Then you can manage multiple instances of <code>GraphDash</code> using <code>Gunicorn</code> with:</p>
 
