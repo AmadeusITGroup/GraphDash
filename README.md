@@ -1,37 +1,42 @@
 GraphDash
 =========
 
-![](docs/example.gif)
-
-Introduction
-------------
-
 `GraphDash` is a web-based dashboard built on graphs and their metadata.
-For example, if you have in a directory:
+For example, if you have two graphs in a directory:
 
 ```bash
-$ ls default_graph_dir
-graph.svg
-graph.txt
+$ cd default_graph_dir
+$ ls
+graph.svg graph2.svg
 ```
 
-The svg file is the graph, and must have metadata with YAML format:
+Then you can create two metadata files using YAML format,
+where you can configure how the graphs will be displayed:
 
 ```bash
-$ cat default_graph_dir/graph.txt
+$ cat graph.txt
 name: graph.svg
-title: "A nice graph"
-family: Weather
-text: This is the text under the graph.
+family: 'Category 1'
+title: '*Real serious* graph'
+text: |
+    The description
+
+$ cat graph2.txt
+name: graph2.svg
+family: 'Category 2'
+title: 'Another important graph'
 ```
 
-You can put as many graphs as you want in the directory, then start the
-graph dashboard. You will get a web interface with search box,
-autocompletion and easy navigation.
+You may then start the graph dashboard. You will get a nice web interface
+displaying your graphs, and a search box with autocompletion.
+You can easily navigate and share your graphs.
 
 ```bash
-GraphDash -r default_graph_dir
+$ GraphDash --root .
+* Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)
 ```
+
+![](docs/example.gif)
 
 Installation
 ------------
@@ -44,44 +49,38 @@ cd graphdash
 pip install --user .
 ```
 
-Or install in a `virtualenv`:
+Or use the Python package:
 
 ```bash
-virtualenv --clear --no-site-packages .env
-source .env/bin/activate
-pip install .
+pip install --user graphdash
 ```
 
 Launch the webapp
 -----------------
 
-Just do (`$PATH` should include `~/.local/bin` if installation in user
-space):
+For user-space installation, make sure your `$PATH` includes `~/.local/bin`.
 
 ```bash
-GraphDash -r default_graph_dir
+$ GraphDash -r default_graph_dir
+* Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)
 ```
 
-The dashboard can be configured with a configuration file like this
-(also YAML):
+The dashboard can be configured with a YAML config file and the `-c/--conf` option:
 
 ```bash
 $ cat docs/example.conf
-root: default_graph_dir
-title: "Default title"
-subtitle: "Default subtitle"
+root: ../default_graph_dir
+title: "Example of title ;)"
+subtitle: "Example of subtitle"
+
+$ GraphDash -c docs/example.conf
+* Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)
 ```
 
-Then use `-c` to use it:
+You can generate a template of configuration file:
 
 ```bash
-GraphDash -c docs/example.conf
-```
-
-You can generate a template of configuration file like this:
-
-```bash
-GraphDash -C template.conf
+$ GraphDash -C template.conf
 ```
 
 Serve with Gunicorn
@@ -90,28 +89,62 @@ Serve with Gunicorn
 If not already installed on your machine, install `Gunicorn`:
 
 ```bash
-# On Fedora you may need to do beforehand as root: yum install libffi-devel
-pip install --user gunicorn
+pip install --user gunicorn # on Fedora you may need to install libffi-devel before
 ```
 
-You can import the webapp through `graphdash:app`, so using `Gunicorn`:
+Since you can import the webapp through `graphdash:app`, you can serve it with `Gunicorn`:
 
 ```bash
-gunicorn -b 0.0.0.0:8888 --pid server.pid graphdash:app &
+gunicorn -b 0.0.0.0:8888 --pid server.pid graphdash:app
 ```
 
-The configuration file of the webapp can be searched using the `CONF`
-environment variable. With `Gunicorn`, you can pass environment variables
-to the workers with `--env`, so you can do:
+The configuration file of the webapp can be set with the `CONF` environment variable.
+With `Gunicorn`, you can pass environment variables to the workers with `--env`:
 
 ```bash
-gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app &
+gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app
 ```
 
-With `Gunicorn`, you can restart the server by sending a `HUP` signal:
+But you should *not* use these commands yourself, that is what `GraphDashManage` is for!
+
+GraphDashManage
+---------------
+
+`GraphDashManage` is used to `start`, `stop`, `restart` the
+instances of `Gunicorn` serving `graphdash:app`. It needs a
+configuration file in the current directory:
 
 ```bash
-kill -HUP `cat server.pid` # restart !
+$ cat settings.sh
+ALL_MODES=(
+   ['prod']="docs/example.conf"
+   ['test']="docs/example.conf"
+)
+ALL_PORTS=(
+   ['prod']=1234
+   ['test']=5678
+)
+WORKERS=3
+```
+
+Then you can manage multiple instances of `GraphDash` using `Gunicorn` with:
+
+```bash
+$ GraphDashManage start prod
+[INFO] Listening at: http://0.0.0.0:1234
+[INFO] Booting worker with pid: 30403
+[INFO] Booting worker with pid: 30404
+[INFO] Booting worker with pid: 30405
+
+$ GraphDashManage start test
+[INFO] Listening at: http://0.0.0.0:5678
+...
+```
+
+You can generate a template of settings:
+
+```bash
+$ GraphDashManage template > template.sh # to be moved to settings.sh
 ```
 
 Webapp configuration file
@@ -119,41 +152,41 @@ Webapp configuration file
 
 Possible entries (everything is optional):
 
--   root: the root directory of the graphs
--   families: path to the families metadata file (optional)
--   title: the title of the webapp
--   subtitle: the subtitle of the webapp
--   placeholder: the default text in the search field
--   header: an optional message at the top (markdown syntax)
--   footer: an optional message at the bottom (markdown syntax)
--   showfamilynumbers: a boolean to toggle family numbering (default is true)
--   showgraphnumbers: a boolean to toggle graph numbering (default is true)
--   theme: change css theme (default is dark)
--   keep: the proportion of common words kept for autocompletion
--   logfile: change default log file of the webapp
--   raw: when loading, look for all graphs and ignore txt metadata
--   verbose: a boolean indicating verbosity when loading application
--   debug: debug mode (enable Grunt livereload, enable Flask debug mode)
--   headless: headless mode (only search is available, no page is rendered)
--   port: when launched with Flask development server only, port
+-   `root`: the root directory of the graphs
+-   `families`: path to the families metadata file (optional)
+-   `title`: the title of the webapp
+-   `subtitle`: the subtitle of the webapp
+-   `placeholder`: the default text in the search field
+-   `header`: an optional message at the top (markdown syntax)
+-   `footer`: an optional message at the bottom (markdown syntax)
+-   `showfamilynumbers`: a boolean to toggle family numbering (default is true)
+-   `showgraphnumbers`: a boolean to toggle graph numbering (default is true)
+-   `theme`: change css theme (default is dark)
+-   `keep`: the proportion of common words kept for autocompletion
+-   `logfile`: change default log file of the webapp
+-   `raw`: when loading, look for all graphs and ignore txt metadata
+-   `verbose`: a boolean indicating verbosity when loading application
+-   `debug`: debug mode (enable Grunt livereload, enable Flask debug mode)
+-   `headless`: headless mode (only search is available, no page is rendered)
+-   `port`: when launched with Flask development server only, port
 
 Graph metadata
 --------------
 
 Several attributes are supported:
 
--   name: the path to the graph
--   title: title of the graph, recommended for display purposes (markdown syntax)
--   family: the subsection in which the graph is
--   index: an optional list of keywords describing the graph (useful for search feature)
--   text: an optional description of the graph (markdown syntax)
--   pretext: an optional message appearing before the graph (markdown syntax)
--   file: optional path to the raw data
--   export: optional path to the exportable graph (for example, a PNG file)
--   rank: integer, optional value used to change graphs order (default uses titles)
--   showtitle: a boolean to toggle title display for the graph (default is false)
--   labels: a list of labels (like 'new') which will be rendered in the UI as colored circles
--   other: other metadata not used by GraphDash, but may be needed by other things reading the txt files
+-   `name`: the path to the graph
+-   `title`: title of the graph, recommended for display purposes (markdown syntax)
+-   `family`: the subsection in which the graph is
+-   `index`: an optional list of keywords describing the graph (useful for search feature)
+-   `text`: an optional description of the graph (markdown syntax)
+-   `pretext`: an optional message appearing before the graph (markdown syntax)
+-   `file`: optional path to the raw data
+-   `export`: optional path to the exportable graph (for example, a PNG file)
+-   `rank`: integer, optional value used to change graphs order (default uses titles)
+-   `showtitle`: a boolean to toggle title display for the graph (default is false)
+-   `labels`: a list of labels (like 'new') which will be rendered in the UI as colored circles
+-   `other`: other metadata not used by GraphDash, but may be needed by other things reading the txt files
 
 Note that if the `name` attribute is missing, the graph will not be
 shown and the text will be displayed anyway, like a blog entry.
@@ -162,32 +195,31 @@ Family metadata
 ---------------
 
 You may put a `.FAMILIES.txt` file at the root of the graph directory.
-This file may contain metadata for families. It should be a YAML list
-like this:
+This file may contain metadata for families. It should be a YAML list:
 
 ```yaml
-- family: Chairs
-  rank : 1
-- family: Tables
+- family: chairs
   rank : 0
+- family: tables
+  rank : 1
   text: This is a description
-  alias: This text will appear instead of other_family
+  alias: This text will appear instead of "tables"
   labels: new
 ```
 
 Each element of the list should be a dict containing:
 
--   family: the family considered
--   rank: integer, optional value used to change families order (default
+-   `family`: the family considered
+-   `rank`: integer, optional value used to change families order (default
     uses family name)
--   text: an optional description of the family (markdown syntax)
--   alias: an optional name who may be longer than the one in the url
+-   `text`: an optional description of the family (markdown syntax)
+-   `alias`: an optional name who may be longer than the one in the url
     (useful to build nice urls)
--   labels: a list of labels (like 'new') which will be rendered in the
+-   `labels`: a list of labels (like `new`) which will be rendered in the
     UI as colored circles
 
-Available labels are "new", "update", "bugfix", "warning", "error",
-"ongoing", "obsolete". You may give other labels which will be rendered
+Available labels are `new`, `update`, `bugfix`, `warning`, `error`,
+`ongoing`, `obsolete`. You may give other labels which will be rendered
 with defaults colors. For customization, you may specify your own labels
 with a dict syntax:
 
@@ -198,62 +230,6 @@ labels:
   text_color: black
   text: "NEW LABEL"
   tooltip: null
-```
-
-CLI
----
-
-You can override almost any parameter from the CLI, make sure to check
-`GraphDash --help`.
-
-Manager script
---------------
-
-The manager script `GraphDashManage` is used to start|stop|restart the
-instances of `Gunicorn` serving `graphdash:app`. It needs a
-configuration file like this in the current directory:
-
-```bash
-$ cat settings.sh
-ALL_MODES=(
-   ['prod']="docs/example.conf"
-   ['test']="docs/example.conf"
-)
-
-ALL_PORTS=(
-   ['prod']=1234
-   ['test']=5678
-)
-```
-
-You can generate a template of such file with:
-
-```bash
-$ GraphDashManage template > template.sh # to be moved to settings.sh
-```
-
-Then you can use the script to manage multiple instances of `GraphDash`
-(with `Gunicorn`):
-
-```bash
-$ GraphDashManage start prod
-$ GraphDashManage start test
-$ GraphDashManage reload test
-$ GraphDashManage
-Usage: GraphDashManage (start|stop|restart|forcestop|reload|status|fullstatus|template) [mode1 [mode2...]]
-
-Use Gunicorn to serve GraphDash instances described in settings.sh.
-
-start       : start servers
-stop        : gracefully stop servers (QUIT signal)
-restart     : gracefully stop servers (QUIT signal), wait for processes to finish, then start servers
-forcestop   : force stop servers (KILL signal)
-reload      : reload servers (HUP signal)
-increment   : increment number of workers (TTIN signal)
-decrement   : decrement number of workers (TTOU signal)
-status      : display status of servers
-fullstatus  : display status of all servers
-template    : display a template of settings.sh file
 ```
 
 Development
