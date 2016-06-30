@@ -20,24 +20,32 @@
 
     <section class="main-content">
       <p><code>GraphDash</code> is a web-based dashboard built on graphs and their metadata.
-For example, if you have:</p>
+For example, if you have two graphs in a directory:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ ls default_graph_dir
-graph.svg
-graph.txt</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ <span class="pl-c1">cd</span> default_graph_dir
+$ ls
+graph.svg graph2.svg</pre></div>
 
-<p>The svg file is the graph, and must have metadata with YAML format:</p>
+<p>Then you can create two metadata files using YAML format,
+where you can configure how the graphs will be displayed:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ cat default_graph_dir/graph.txt
+<div class="highlight highlight-source-shell"><pre>$ cat graph.txt
 name: graph.svg
-family: Category 1
-title: <span class="pl-s"><span class="pl-pds">'</span>*Real serious* graph<span class="pl-pds">'</span></span></pre></div>
+family: <span class="pl-s"><span class="pl-pds">'</span>Category 1<span class="pl-pds">'</span></span>
+title: <span class="pl-s"><span class="pl-pds">'</span>*Real serious* graph<span class="pl-pds">'</span></span>
+text: <span class="pl-k">|</span>
+    The description
 
-<p>You can put as many graphs as you want in the directory, then start the
-graph dashboard. You will get a web interface with search box,
-autocompletion and easy navigation.</p>
+$ cat graph2.txt
+name: graph2.svg
+family: <span class="pl-s"><span class="pl-pds">'</span>Category 2<span class="pl-pds">'</span></span>
+title: <span class="pl-s"><span class="pl-pds">'</span>Another important graph<span class="pl-pds">'</span></span></pre></div>
 
-<div class="highlight highlight-source-shell"><pre>$ GraphDash -r default_graph_dir
+<p>You may then start the graph dashboard. You will get a nice web interface
+displaying your graphs, and a search box with autocompletion.
+You can easily navigate and share your graphs.</p>
+
+<div class="highlight highlight-source-shell"><pre>$ GraphDash --root <span class="pl-c1">.</span>
 <span class="pl-k">*</span> Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)</pre></div>
 
 <p><img src="https://raw.githubusercontent.com/AmadeusITGroup/GraphDash/master/docs/example.gif" alt=""></p>
