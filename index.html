@@ -29,14 +29,14 @@ graph.svg graph2.svg</pre></div>
 <p>Then you can create two metadata files using YAML format,
 where you can configure how the graphs will be displayed:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ cat graph.txt
+<div class="highlight highlight-source-shell"><pre>$ cat graph.yaml
 name: graph.svg
 family: <span class="pl-s"><span class="pl-pds">'</span>Category 1<span class="pl-pds">'</span></span>
 title: <span class="pl-s"><span class="pl-pds">'</span>*Real serious* graph<span class="pl-pds">'</span></span>
 text: <span class="pl-k">|</span>
     The description
 
-$ cat graph2.txt
+$ cat graph2.yaml
 name: graph2.svg
 family: <span class="pl-s"><span class="pl-pds">'</span>Category 2<span class="pl-pds">'</span></span>
 title: <span class="pl-s"><span class="pl-pds">'</span>Another important graph<span class="pl-pds">'</span></span></pre></div>
@@ -73,17 +73,17 @@ pip install --user <span class="pl-c1">.</span></pre></div>
 
 <p>The dashboard can be configured with a YAML config file and the <code>-c/--conf</code> option:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ cat docs/example.conf
+<div class="highlight highlight-source-shell"><pre>$ cat docs/graphdash.yaml
 root: ../default_graph_dir
 title: <span class="pl-s"><span class="pl-pds">"</span>Example of title ;)<span class="pl-pds">"</span></span>
 subtitle: <span class="pl-s"><span class="pl-pds">"</span>Example of subtitle<span class="pl-pds">"</span></span>
 
-$ GraphDash -c docs/example.conf
+$ GraphDash -c docs/graphdash.yaml
 <span class="pl-k">*</span> Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)</pre></div>
 
 <p>You can generate a template of configuration file:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ GraphDash -C template.conf</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ GraphDash -C template.yaml</pre></div>
 
 <h2>
 <a id="serve-with-gunicorn" class="anchor" href="#serve-with-gunicorn" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Serve with Gunicorn</h2>
@@ -99,7 +99,7 @@ $ GraphDash -c docs/example.conf
 <p>The configuration file of the webapp can be set with the <code>CONF</code> environment variable.
 With <code>Gunicorn</code>, you can pass environment variables to the workers with <code>--env</code>:</p>
 
-<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app</pre></div>
+<div class="highlight highlight-source-shell"><pre>gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/graphdash.yaml graphdash:app</pre></div>
 
 <p>But you should <em>not</em> use these commands yourself, that is what <code>GraphDashManage</code> is for!</p>
 
@@ -112,8 +112,8 @@ configuration file in the current directory:</p>
 
 <div class="highlight highlight-source-shell"><pre>$ cat settings.sh
 ALL_MODES=(
-   [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/example.conf<span class="pl-pds">"</span></span>
-   [<span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/example.conf<span class="pl-pds">"</span></span>
+   [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/graphdash.yaml<span class="pl-pds">"</span></span>
+   [<span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>]=<span class="pl-s"><span class="pl-pds">"</span>docs/graphdash.yaml<span class="pl-pds">"</span></span>
 )
 ALL_PORTS=(
    [<span class="pl-s"><span class="pl-pds">'</span>prod<span class="pl-pds">'</span></span>]=1234
