@@ -35,7 +35,7 @@ echo -e "\n> Serving with `which gunicorn`"
 gunicorn --error-logfile=-           \
          --access-logfile=-          \
          --bind $BIND                \
-         --env CONF=test.conf        \
+         --env CONF=test.yaml        \
          --pid=$PIDF graphdash:app   \
          &
 echo "Sleeping 3"

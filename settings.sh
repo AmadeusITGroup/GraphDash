@@ -1,6 +1,6 @@
 ALL_MODES=(
-    ['prod']="docs/example.conf"
-    ['test']="docs/example.conf"
+    ['prod']='docs/graphdash.yaml'
+    ['test']='docs/graphdash.yaml'
 )
 
 ALL_PORTS=(

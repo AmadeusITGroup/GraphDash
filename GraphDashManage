@@ -33,8 +33,8 @@ TEMPLATE="\
 # GraphDashManage stop mode1 mode2
 #
 ALL_MODES=(
-    [mode1]='docs/example.conf'
-    [mode2]='docs/example.conf'
+    [mode1]='docs/graphdash.yaml'
+    [mode2]='docs/graphdash.yaml'
 )
 
 ALL_PORTS=(

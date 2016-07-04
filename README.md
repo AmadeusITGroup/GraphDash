@@ -14,14 +14,14 @@ Then you can create two metadata files using YAML format,
 where you can configure how the graphs will be displayed:
 
 ```bash
-$ cat graph.txt
+$ cat graph.yaml
 name: graph.svg
 family: 'Category 1'
 title: '*Real serious* graph'
 text: |
     The description
 
-$ cat graph2.txt
+$ cat graph2.yaml
 name: graph2.svg
 family: 'Category 2'
 title: 'Another important graph'
@@ -68,19 +68,19 @@ $ GraphDash -r default_graph_dir
 The dashboard can be configured with a YAML config file and the `-c/--conf` option:
 
 ```bash
-$ cat docs/example.conf
+$ cat docs/graphdash.yaml
 root: ../default_graph_dir
 title: "Example of title ;)"
 subtitle: "Example of subtitle"
 
-$ GraphDash -c docs/example.conf
+$ GraphDash -c docs/graphdash.yaml
 * Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)
 ```
 
 You can generate a template of configuration file:
 
 ```bash
-$ GraphDash -C template.conf
+$ GraphDash -C template.yaml
 ```
 
 Serve with Gunicorn
@@ -102,7 +102,7 @@ The configuration file of the webapp can be set with the `CONF` environment vari
 With `Gunicorn`, you can pass environment variables to the workers with `--env`:
 
 ```bash
-gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/example.conf graphdash:app
+gunicorn -b 0.0.0.0:8888 --pid server.pid --env CONF=docs/graphdash.yaml graphdash:app
 ```
 
 But you should *not* use these commands yourself, that is what `GraphDashManage` is for!
@@ -117,8 +117,8 @@ configuration file in the current directory:
 ```bash
 $ cat settings.sh
 ALL_MODES=(
-   ['prod']="docs/example.conf"
-   ['test']="docs/example.conf"
+   ['prod']="docs/graphdash.yaml"
+   ['test']="docs/graphdash.yaml"
 )
 ALL_PORTS=(
    ['prod']=1234
@@ -164,7 +164,7 @@ Possible entries (everything is optional):
 -   `theme`: change css theme (default is dark)
 -   `keep`: the proportion of common words kept for autocompletion
 -   `logfile`: change default log file of the webapp
--   `raw`: when loading, look for all graphs and ignore txt metadata
+-   `raw`: when loading, look for all graphs and ignore metadata
 -   `verbose`: a boolean indicating verbosity when loading application
 -   `debug`: debug mode (enable Grunt livereload, enable Flask debug mode)
 -   `headless`: headless mode (only search is available, no page is rendered)
@@ -185,8 +185,8 @@ Several attributes are supported:
 -   `export`: optional path to the exportable graph (for example, a PNG file)
 -   `rank`: integer, optional value used to change graphs order (default uses titles)
 -   `showtitle`: a boolean to toggle title display for the graph (default is false)
--   `labels`: a list of labels (like 'new') which will be rendered in the UI as colored circles
--   `other`: other metadata not used by GraphDash, but may be needed by other things reading the txt files
+-   `labels`: a list of labels (like `'new'`) which will be rendered in the UI as colored circles
+-   `other`: other metadata not used by `GraphDash`, but may be needed by other things reading the metadata
 
 Note that if the `name` attribute is missing, the graph will not be
 shown and the text will be displayed anyway, like a blog entry.
@@ -194,7 +194,7 @@ shown and the text will be displayed anyway, like a blog entry.
 Family metadata
 ---------------
 
-You may put a `.FAMILIES.txt` file at the root of the graph directory.
+You may put a `.FAMILIES.yaml` file at the root of the graph directory.
 This file may contain metadata for families. It should be a YAML list:
 
 ```yaml
