@@ -9,6 +9,7 @@ try:
 except ImportError:
     import shlex
 from collections import defaultdict, namedtuple
+from glob import glob
 
 import logging
 from flask import (Flask, render_template, abort, jsonify,
@@ -17,7 +18,7 @@ from flask import (Flask, render_template, abort, jsonify,
 
 from .flask_utils import cache, after_request_log
 from .markdown_filter import md_convert, md_iconvert
-from .defaults import default_conf, DEFAULT_FAMILY_FILENAME
+from .defaults import default_conf, DEFAULT_FAMILIES_GLOB
 from .load import (load_args, load_conf, load_data, load_data_raw,
                    load_tags, load_themes, load_families,
                    post_load, export_conf, export_families,
@@ -74,11 +75,11 @@ else:
     else:
         # If families is not set we try a default file
         # We only load if it is here to avoid triggering a warning
-        DEFAULT_FAMILY_FILE = op.join(CONF['root'], DEFAULT_FAMILY_FILENAME)
-        if op.isfile(DEFAULT_FAMILY_FILE):
+        FAMILIES_FILES = glob(op.join(CONF['root'], DEFAULT_FAMILIES_GLOB))
+        if FAMILIES_FILES:
             # File is here, we add it to the conf and load it
-            CONF['families'] = DEFAULT_FAMILY_FILE
-            load_families(DATA, DEFAULT_FAMILY_FILE)
+            CONF['families'] = FAMILIES_FILES[0]
+            load_families(DATA, FAMILIES_FILES[0])
 
 # Exporting configuration file, except the 'export_*' attributes
 if CONF['export_conf'] is not None:

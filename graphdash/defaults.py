@@ -96,7 +96,7 @@ def default_conf():
         'export_families'   : None,
     })
 
-DEFAULT_FAMILY_FILENAME = '.FAMILIES.txt'
+DEFAULT_FAMILIES_GLOB = '.FAMILIES.*'
 
 
 # ARGUMENT PARSER
