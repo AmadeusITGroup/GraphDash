@@ -202,9 +202,16 @@ def page_not_found(_):
 
 # STATIC FILES
 #
+MIMETYPES = {
+    '.yaml': 'text/plain',
+    '.yml': 'text/plain',
+}
+
+
 @app.route('/data/<path:filename>')
 def get_data(filename):
-    return send_from_directory(CONF['root'], filename)
+    ext = op.splitext(filename)[1].lower()
+    return send_from_directory(CONF['root'], filename, mimetype=MIMETYPES.get(ext))
 
 
 @app.route('/assets/<path:filename>')
