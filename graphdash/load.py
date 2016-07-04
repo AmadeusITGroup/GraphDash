@@ -317,8 +317,8 @@ def no_mix(data, sink=None):
     for node_path, node in data.iter_all_nodes():
         if node.sons and node.data['graphs']:
             # Moving graphs to the sink
-            print(('(!) Node {0} had both sub-families and graphs, '
-                   'moving graphs to family "{1}"').format(node_path, sink))
+            print(('(!) Family {0} had both sub-families and graphs, '
+                   'moving graphs to sub-family "{1}"').format(node_path, sink))
 
             sink_node = node.create_from_path((sink,))
             sink_node.data['graphs'].extend(node.data['graphs'])
