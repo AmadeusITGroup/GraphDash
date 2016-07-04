@@ -271,7 +271,7 @@ def load_data(data_dir):
         print('(!) {0} is not a directory'.format(data_dir))
         return data
 
-    for filepath in iter_all_files(data_dir, ['.txt']):
+    for filepath in iter_all_files(data_dir, ['.txt', '.yaml', '.yml']):
         try:
             with open(filepath) as f:
                 loaded = yaml.load(f)
