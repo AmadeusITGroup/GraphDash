@@ -29,7 +29,7 @@ if sys.version_info[0] < 3:
 
 setup(
     name='GraphDash',
-    version='0.9.1',
+    version='0.9.2',
     author='Alex Prengère',
     author_email='alexprengere@amadeus.com',
     url='https://github.com/AmadeusITGroup/graphdash',

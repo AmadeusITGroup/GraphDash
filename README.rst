@@ -36,7 +36,7 @@ You can easily navigate and share your graphs.
     $ GraphDash --root .
     * Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)
 
-.. figure:: docs/example.gif
+.. figure:: https://raw.githubusercontent.com/AmadeusITGroup/GraphDash/master/docs/example.gif
    :alt: 
 
 Installation

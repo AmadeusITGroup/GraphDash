@@ -33,7 +33,7 @@ $ GraphDash --root .
 * Running on http://0.0.0.0:5555/ (Press CTRL+C to quit)
 ```
 
-![](docs/example.gif)
+![](https://raw.githubusercontent.com/AmadeusITGroup/GraphDash/master/docs/example.gif)
 
 Installation
 ------------
