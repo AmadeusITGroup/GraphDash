@@ -47,6 +47,12 @@ a:visited
   background: $bg-color-hover
   color:      $fg-color-hover
 
+/* IE 10-11 hack to fix SVG sizing bug */
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none)
+  embed
+    width: 100%
+    height: 100%
+
 /* Format */
 =left
   text-align: left
