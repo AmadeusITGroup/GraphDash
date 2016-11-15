@@ -139,7 +139,7 @@ for m in $MODES; do
     esac
 
     do_start () {
-        gunicorn --error-logfile=- --access-logfile=- --workers $WORKERS -b "0.0.0.0:$PORT" -p "$PIDF" -e CONF="$CONF" -n "$NAME" graphdash:app &
+        python `which gunicorn` --error-logfile=- --access-logfile=- --workers $WORKERS -b "0.0.0.0:$PORT" -p "$PIDF" -e CONF="$CONF" -n "$NAME" graphdash:app &
     }
 
     do_stop () {
