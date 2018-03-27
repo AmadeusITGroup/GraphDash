@@ -93,7 +93,7 @@ If not already installed on your machine, install ``Gunicorn``:
 
 .. code:: bash
 
-    pip install --user gunicorn # on Fedora you may need to install libffi-devel before
+    pip install --user gunicorn setproctitle  # on Fedora you may need to install libffi-devel before
 
 Since you can import the webapp through ``graphdash:app``, you can serve
 it with ``Gunicorn``:
