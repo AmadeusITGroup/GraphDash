@@ -31,10 +31,7 @@ throttle = (fn, threshhold, scope) ->
 
 $(document).ready ->
     # Lazy loading all images
-    $("img").lazyload(
-        threshold : 200
-        effect : "fadeIn"
-    )
+    myLazyLoad = new LazyLoad(elements_selector: '.lazy')
 
     # Is sidebar shown?
     sidebarShown = true

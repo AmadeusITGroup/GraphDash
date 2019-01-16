@@ -35,10 +35,8 @@
 
   $(document).ready(function() {
     var $anchors, $root, $sidebarLinks, detectShortcut, hashnb, marginWithMenu, marginWithoutMenu, scrollToAnchor, selected, sidebarShown, toggleSidebar, updateSelected, updateSidebar;
-    $("img").lazyload({
-      threshold: 200,
-      effect: "fadeIn"
-    });
+    myLazyLoad = new LazyLoad({elements_selector: '.lazy'});
+
     sidebarShown = true;
     marginWithMenu = $('#main_family').css('margin-left');
     marginWithoutMenu = $('#main_family').css('margin-right');
