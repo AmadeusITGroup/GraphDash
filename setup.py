@@ -29,8 +29,8 @@ if sys.version_info[0] < 3:
 
 setup(
     name='GraphDash',
-    version='0.9.3',
-    author='Alex Prengère',
+    version='0.10',
+    author='Alex Prengere',
     author_email='alexprengere@amadeus.com',
     url='https://github.com/AmadeusITGroup/graphdash',
     description='A web-based dashboard built on graphs and their metadata.',
