@@ -3,7 +3,7 @@
 
 {% block js %}
     {{ super() }}
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@8.17.0/dist/lazyload.min.js"></script>script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@8.17.0/dist/lazyload.min.js"></script>
 
     <script src="{{ url_for('get_asset', filename='js/family.min.js') }}"></script>
 {% endblock %}
