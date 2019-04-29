@@ -83,9 +83,6 @@
     <ul class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
         <li>
         <a href="{{ url_for('family_index', family='/'.join(up_tuple)) }}">{{ get(up_tuple).alias }}</a>
-        {% if text %}
-        <div id="text">{{ text |md |safe }}</div>
-        {% endif %}
     {% endfor %}
         <ol class="{{ '' if conf.showfamilynumbers else 'nomark' }}">
         {% for (son_name, son) in sons.items() |sortsons %}
@@ -107,6 +104,9 @@
         {% endfor %}
         </ol>
     {% for _ in up_paths(family, include_root=False) %}
+        {% if text %}
+        <div id="text">{{ text |md |safe }}</div>
+        {% endif %}
         </li>
     </ul>
     {% endfor %}
