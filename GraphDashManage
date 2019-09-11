@@ -42,6 +42,7 @@ ALL_PORTS=(
     [mode2]=6666
 )
 
+TIMEOUT=30
 WORKERS=1"
 
 check_settings () {
@@ -84,6 +85,7 @@ esac
 #
 declare -A ALL_MODES ALL_PORTS # associative arrays
 WORKERS=2
+TIMEOUT=30
 
 check_settings # exit if no settings file
 . "$FILE"      # overriding when sourcing settings file
@@ -139,7 +141,7 @@ for m in $MODES; do
     esac
 
     do_start () {
-        python `which gunicorn` --error-logfile=- --access-logfile=- --workers $WORKERS -b "0.0.0.0:$PORT" -p "$PIDF" -e CONF="$CONF" -n "$NAME" graphdash:app &
+        python `which gunicorn` --error-logfile=- --access-logfile=- --timeout=$TIMEOUT --workers $WORKERS -b "0.0.0.0:$PORT" -p "$PIDF" -e CONF="$CONF" -n "$NAME" graphdash:app &
     }
 
     do_stop () {
