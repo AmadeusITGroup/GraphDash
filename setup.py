@@ -17,7 +17,7 @@ with open('LICENSE') as f:
 
 INSTALL_REQUIRES = [
     'argparse',
-    'PyYAML==3.11',
+    'PyYAML==5.4',
     'Flask==0.12.3',
     'Markdown==2.4',
     'Pygments==2.1.3',
