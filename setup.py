@@ -20,7 +20,7 @@ INSTALL_REQUIRES = [
     'PyYAML==3.11',
     'Flask==0.12.3',
     'Markdown==2.4',
-    'Pygments==2.1.3',
+    'Pygments==2.7.4',
     'stop-words',
 ]
 
