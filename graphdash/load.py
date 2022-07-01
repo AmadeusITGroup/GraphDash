@@ -16,6 +16,16 @@ from .defaults import (DEFAULT_FAMILY, SINK, get_parser,
                        default_graph_data, default_family_data,
                        default_label_data)
 
+
+try:
+    yaml.CLoader
+except AttributeError:
+    def yaml_load(s):
+        return yaml.safe_load(s)
+else:
+    def yaml_load(s):
+        return yaml.load(s, Loader=yaml.CLoader)
+
 if sys.version_info[0] >= 3:
     unicode = str
 
@@ -111,7 +121,7 @@ def load_conf(conf_file):
 
     try:
         with open(conf_file) as f:
-            conf = yaml.load(f)
+            conf = yaml_load(f)
 
     except yaml.YAMLError:
         print('(!) {0} parsing failed (YAML dict expected)'.format(conf_file))
@@ -159,7 +169,7 @@ def load_families(data, family_file):
 
     try:
         with open(family_file) as f:
-            families = yaml.load(f)
+            families = yaml_load(f)
 
     except yaml.YAMLError:
         print('(!) {0} parsing failed (YAML dict expected)'.format(family_file))
@@ -274,7 +284,7 @@ def load_data(data_dir):
     for filepath in iter_all_files(data_dir, ['.txt', '.yaml', '.yml']):
         try:
             with open(filepath) as f:
-                loaded = yaml.load(f)
+                loaded = yaml_load(f)
 
         except yaml.YAMLError:
             print('(!) {0} parsing failed (YAML dict expected), skipping'.format(filepath))

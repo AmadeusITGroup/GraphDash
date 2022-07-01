@@ -5,7 +5,11 @@ TransformDict recipe, straight from PEP455:
  http://bugs.python.org/file31761/transformdict3.patch
 """
 
-from collections import MutableMapping
+try:
+    from collections import MutableMapping
+except ImportError:
+    from collections.abc import MutableMapping
+
 _sentinel = object()
 
 

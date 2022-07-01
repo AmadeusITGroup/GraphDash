@@ -16,11 +16,10 @@ with open('LICENSE') as f:
     LICENSE = f.read()
 
 INSTALL_REQUIRES = [
-    'argparse',
-    'PyYAML==3.11',
-    'Flask==0.12.3',
-    'Markdown==2.4',
-    'Pygments==2.1.3',
+    'PyYAML',
+    'Flask',
+    'Markdown',
+    'Pygments',
     'stop-words',
 ]
 
