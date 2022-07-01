@@ -1,53 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Packaging
-"""
-
-from __future__ import with_statement
-from setuptools import setup, find_packages
-
-with open('README.rst') as f:
-    LONG_DESCRIPTION = f.read()
-
-with open('LICENSE') as f:
-    LICENSE = f.read()
-
-INSTALL_REQUIRES = [
-    'PyYAML',
-    'Flask',
-    'Markdown',
-    'Pygments',
-    'stop-words',
-]
+from setuptools import setup
 
 setup(
-    name='GraphDash',
-    version='0.10.3',
-    author='Alex Prengere',
-    author_email='alexprengere@amadeus.com',
-    url='https://github.com/AmadeusITGroup/graphdash',
-    description='A web-based dashboard built on graphs and their metadata.',
-    long_description=LONG_DESCRIPTION,
-    license=LICENSE,
-    packages=find_packages(),
-    package_data={
-        'graphdash': [
-            'templates/*.html',
-            'assets/css/*',
-            'assets/js/*',
-            'assets/img/*',
-        ],
-    },
-    zip_safe=False,
-    install_requires=INSTALL_REQUIRES,
-    entry_points={
-        'console_scripts': [
-            'GraphDash=graphdash.__main__:main',
-        ],
-    },
-    scripts=[
-        'GraphDashManage',
-    ],
+    use_scm_version=True,
 )
