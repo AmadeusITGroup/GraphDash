@@ -6,7 +6,6 @@ Packaging
 """
 
 from __future__ import with_statement
-import sys
 from setuptools import setup, find_packages
 
 with open('README.rst') as f:
@@ -22,9 +21,6 @@ INSTALL_REQUIRES = [
     'Pygments',
     'stop-words',
 ]
-
-if sys.version_info[0] < 3:
-    INSTALL_REQUIRES.append('ushlex==0.99')
 
 setup(
     name='GraphDash',
