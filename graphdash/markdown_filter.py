@@ -21,6 +21,7 @@ class TagStripper(object):
         else:
             return text
 
+
 TS = TagStripper('p')
 
 # Used outside this module

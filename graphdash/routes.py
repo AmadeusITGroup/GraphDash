@@ -318,10 +318,10 @@ def search_results(query):
             # Tuple where the freetext is looked for
             t = family_path_low, family_alias_low, graph_title_low, graph_keywords
 
-            if (graph_keywords.issuperset(query.keywords.include) and
-                    graph_keywords.isdisjoint(query.keywords.exclude) and
-                    all(is_in_any(w, t) for w in query.freetext.include) and
-                    all(is_not_in(w, t) for w in query.freetext.exclude)):
+            if (graph_keywords.issuperset(query.keywords.include)
+                    and graph_keywords.isdisjoint(query.keywords.exclude)
+                    and all(is_in_any(w, t) for w in query.freetext.include)
+                    and all(is_not_in(w, t) for w in query.freetext.exclude)):
 
                 nb_matches += 1
                 if CONF['headless']:
